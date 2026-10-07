@@ -1,5 +1,12 @@
+import warnings
+
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SAWarning
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+# SQLite no maneja Decimal de forma nativa y SQLAlchemy avisa de ello.
+# Con 2 decimales de precisión el aviso es inofensivo (en PostgreSQL desaparece).
+warnings.filterwarnings("ignore", message="Dialect sqlite.*Decimal", category=SAWarning)
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./smartticket.db"
 

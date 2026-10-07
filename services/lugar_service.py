@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 
+from exceptions import ConflictoError
+from models.evento import Evento
 from models.lugar import Lugar
 from schemas.lugar_schema import LugarCreate
 
@@ -22,6 +24,7 @@ def obtener_lugar_por_id(db: Session, lugar_id: int) -> Lugar | None:
     """Devuelve un lugar por su ID, o None si no existe."""
     return db.query(Lugar).filter(Lugar.id == lugar_id).first()
 
+
 def actualizar_lugar(
     db: Session, lugar_id: int, lugar_data: LugarCreate
 ) -> Lugar | None:
@@ -39,10 +42,16 @@ def actualizar_lugar(
 
 
 def eliminar_lugar(db: Session, lugar_id: int) -> bool:
-    """Elimina un lugar. Devuelve False si no existe."""
+    """Elimina un lugar. Devuelve False si no existe.
+
+    Lanza ConflictoError si el lugar tiene eventos asociados.
+    """
     lugar = obtener_lugar_por_id(db, lugar_id)
     if lugar is None:
         return False
+
+    if db.query(Evento).filter(Evento.lugar_id == lugar_id).count() > 0:
+        raise ConflictoError("No se puede eliminar el lugar: tiene eventos asociados")
 
     db.delete(lugar)
     db.commit()

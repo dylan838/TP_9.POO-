@@ -47,6 +47,8 @@ def obtener_lugar(lugar_id: int, db: Session = Depends(get_db)):
             detail=f"Lugar con id {lugar_id} no encontrado",
         )
     return lugar
+
+
 @router.put(
     "/{lugar_id}",
     response_model=LugarResponse,
@@ -65,12 +67,16 @@ def actualizar_lugar(
         )
     return lugar_actualizado
 
+
 @router.delete(
     "/{lugar_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar un lugar",
-    description="Elimina un lugar de forma permanente.",
-    responses={404: {"description": "El lugar no existe"}},
+    description="Elimina un lugar. Falla con 409 si tiene eventos asociados.",
+    responses={
+        404: {"description": "El lugar no existe"},
+        409: {"description": "El lugar tiene eventos asociados"},
+    },
 )
 def eliminar_lugar(lugar_id: int, db: Session = Depends(get_db)):
     if not lugar_service.eliminar_lugar(db, lugar_id):
