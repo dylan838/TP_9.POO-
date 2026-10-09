@@ -33,3 +33,15 @@ class CapacidadInsuficienteError(ReglaNegocioError):
 
 class PagoDenegadoError(DominioError):
     """La pasarela de pago rechazó la operación (-> 402)."""
+
+
+class TicketInvalidoError(RecursoNoEncontradoError):
+    """El QR no existe o no corresponde a una entrada válida (-> 404)."""
+
+
+class EntradaYaUtilizadaError(ConflictoError):
+    """La entrada ya fue usada para ingresar (-> 409)."""
+
+
+class TicketNoEmitidoError(ReglaNegocioError):
+    """La entrada existe pero no fue pagada/emitida (-> 400)."""

@@ -1,6 +1,5 @@
 from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal
-from uuid import uuid4
 
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
@@ -104,7 +103,6 @@ def _confirmar_venta(db: Session, venta_id: int, referencia: str) -> PagoRespons
     ahora = datetime.now()
     for entrada in entradas:
         entrada.estado = EstadoEntrada.EMITIDA.value
-        entrada.codigo_qr = uuid4().hex  # contenido del código QR de acceso
         entrada.fecha_emision = ahora
     venta.estado = EstadoVenta.PAGADA.value
     venta.referencia_pago = referencia

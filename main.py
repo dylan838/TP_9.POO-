@@ -4,6 +4,7 @@ from database import Base, engine
 from exception_handlers import registrar_manejadores
 from models import cliente, entrada, evento, lugar, sector, venta  # noqa: F401
 from routers import (
+    acceso_router,
     cliente_router,
     cotizacion_router,
     entrada_router,
@@ -19,7 +20,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="SmartTicket API",
     description="Backend del sistema SmartTicket",
-    version="0.3.0",
+    version="1.0.0",
 )
 
 registrar_manejadores(app)
@@ -31,6 +32,7 @@ app.include_router(entrada_router.router)
 app.include_router(cliente_router.router)
 app.include_router(cotizacion_router.router)
 app.include_router(pago_router.router)
+app.include_router(acceso_router.router)
 
 
 @app.get("/", tags=["Root"])

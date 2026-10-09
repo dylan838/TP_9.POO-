@@ -25,5 +25,6 @@ class EntradaResponse(BaseModel):
     estado: EstadoEntrada
     codigo_qr: str | None = None
     fecha_emision: datetime | None = None
+    fecha_ingreso: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)

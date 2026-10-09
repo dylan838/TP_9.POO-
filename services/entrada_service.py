@@ -11,8 +11,12 @@ from models.entrada import Entrada, EstadoEntrada
 from schemas.entrada_schema import EntradaCreate, EntradaLoteCreate, EntradaUpdate
 from services import sector_service
 
-# Estados que gestiona exclusivamente el flujo de pago (pago_service)
-_ESTADOS_DE_PAGO = {EstadoEntrada.RESERVADA.value, EstadoEntrada.EMITIDA.value}
+# Estados que pertenecen a una venta: los gestionan pago_service y acceso_service
+_ESTADOS_DE_PAGO = {
+    EstadoEntrada.RESERVADA.value,
+    EstadoEntrada.EMITIDA.value,
+    EstadoEntrada.UTILIZADA.value,
+}
 
 
 def _validar_cupo(db: Session, sector_id: int, cantidad: int = 1) -> None:
